@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { BookOpenCheck } from "lucide-react"; // Opcional si usas íconos
+import { BookOpenCheck } from "lucide-react";
 
+const API = import.meta.env.VITE_API_URL;
 type LoanDetail = {
   _id: string;
   book: {
@@ -31,7 +32,7 @@ const LoanDetail: React.FC = () => {
   useEffect(() => {
     const fetchLoan = async () => {
       try {
-        const response = await axios.get(`http://localhost:4000/loans/${loanId}`);
+        const response = await axios.get(`${API}/loans/${loanId}`);
         setLoan(response.data);
       } catch (error) {
         console.error("Error al obtener detalles del préstamo:", error);
@@ -51,9 +52,7 @@ const LoanDetail: React.FC = () => {
 
   const devolverLibro = async () => {
     try {
-      await axios.post("http://localhost:4000/loans/return-book", {
-        loanId: loan?._id,
-      });
+      await axios.post(`${API}/loans/return-book`, { loanId: loan?._id });
       alert("Libro devuelto exitosamente");
       navigate("/userProfile");
     } catch (error) {

@@ -2,6 +2,9 @@ import { useEffect, useState, useMemo } from "react";
 import axios from "axios";
 import { BookOpen, Clock } from "lucide-react"; 
 
+
+const API = import.meta.env.VITE_API_URL;
+
 type Book = {
   _id: string;
   name: string;
@@ -43,7 +46,7 @@ const BookList = () => {
   const [userId, setUserId] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch("http://localhost:4000/books")
+    fetch(`${API}/books`)
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data)) {
@@ -61,13 +64,13 @@ const BookList = () => {
       setUserId(currentUserId);
 
       axios
-        .get(`http://localhost:4000/loans/user/${currentUserId}`)
+        .get(`${API}/loans/user/${currentUserId}`)
         .then((res) => setLoans(res.data))
         .catch((err) => console.error("Error al obtener préstamos:", err));
 
       // Obtener las reservas del usuario
       axios
-        .get(`http://localhost:4000/reservations/user/${currentUserId}`)
+        .get(`${API}/reservations/user/${currentUserId}`)
         .then((res) => setReservations(res.data))
         .catch((err) => console.error("Error al obtener reservas:", err));
     }
@@ -89,7 +92,7 @@ const BookList = () => {
     if (!bookId || !userId) return alert("Debes iniciar sesión");
 
     try {
-      const response = await fetch("http://localhost:4000/reservations/create", {
+      const response = await fetch(`${API}/reservations/create`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId, bookId }),
@@ -113,7 +116,7 @@ const BookList = () => {
     if (!userId) return alert("Debes iniciar sesión");
 
     try {
-      const response = await fetch("http://localhost:4000/loans/request-loan", {
+      const response = await fetch(`${API}/loans/request-loan`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId, bookId }),

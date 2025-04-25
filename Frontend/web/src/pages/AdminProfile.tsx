@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { UserCircle, BookMarked, CheckCircle, XCircle } from "lucide-react"; // Importamos iconos
 
+const API = import.meta.env.VITE_API_URL;
+
 type Book = {
   _id: string;
   name: string;
@@ -53,7 +55,7 @@ const AdminProfile: React.FC = () => {
 
   const fetchUsers = async () => {
     try {
-      const res = await axios.get("http://localhost:4000/users");
+      const res = await axios.get(`${API}/users`);
       setUsers(res.data);
     } catch (err) {
       console.error("Error fetching users:", err);
@@ -62,7 +64,7 @@ const AdminProfile: React.FC = () => {
 
   const fetchBooks = async () => {
     try {
-      const res = await axios.get("http://localhost:4000/books");
+      const res = await axios.get(`${API}/books`);
       setBooks(res.data);
     } catch (err) {
       console.error("Error fetching books:", err);
@@ -71,7 +73,7 @@ const AdminProfile: React.FC = () => {
 
   const fetchPendingLoans = async () => {
     try {
-      const res = await axios.get("http://localhost:4000/loans/pending");
+      const res = await axios.get(`${API}/loans/pending`);
       setPendingLoans(res.data);
     } catch (err) {
       console.error("Error fetching pending loans:", err);
@@ -83,7 +85,7 @@ const AdminProfile: React.FC = () => {
     if (!confirmar) return;
 
     try {
-      await axios.delete(`http://localhost:4000/users/${id}`);
+      await axios.delete(`${API}/users/${id}`);
       fetchUsers();
     } catch (err) {
       console.error("Error deleting user:", err);
@@ -93,7 +95,7 @@ const AdminProfile: React.FC = () => {
 
   const handleDeleteBook = async (id: string) => {
     try {
-      await axios.delete(`http://localhost:4000/books/${id}`);
+      await axios.delete(`${API}/books/${id}`);
       fetchBooks();
     } catch (err) {
       console.error("Error deleting book:", err);
@@ -103,9 +105,9 @@ const AdminProfile: React.FC = () => {
   const handleSaveBook = async () => {
     try {
       if (editingBook) {
-        await axios.put(`http://localhost:4000/books/${editingBook._id}`, newBook);
+        await axios.put(`${API}/books/${editingBook._id}`, newBook);
       } else {
-        await axios.post("http://localhost:4000/books", newBook);
+        await axios.post(`${API}/books`, newBook);
       }
       fetchBooks();
       setEditingBook(null);
@@ -125,8 +127,8 @@ const AdminProfile: React.FC = () => {
 
   const handleApproveLoan = async (loanId: string) => {
     try {
-      await axios.post(`http://localhost:4000/loans/approve/${loanId}`);
-      fetchPendingLoans(); // Recargar la lista de solicitudes pendientes
+      await axios.post(`${API}/loans/approve/${loanId}`);
+      fetchPendingLoans();
       alert("Préstamo aprobado con éxito.");
     } catch (err) {
       console.error("Error approving loan:", err);
@@ -138,7 +140,7 @@ const AdminProfile: React.FC = () => {
     const confirmar = window.confirm("¿Estás seguro de que deseas rechazar esta solicitud de préstamo?");
     if (!confirmar) return;
     try {
-      await axios.post(`http://localhost:4000/loans/reject/${loanId}`);
+      await axios.post(`${API}/loans/reject/${loanId}`);
       fetchPendingLoans(); 
       alert("Solicitud de préstamo rechazada y eliminada.");
     } catch (err) {

@@ -3,6 +3,8 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import UserForm from "../components/UserForm";
 
+const API = import.meta.env.VITE_API_URL;
+
 import {
   UserCircle,
   BookOpenCheck,
@@ -10,7 +12,7 @@ import {
   Clock,
   BookOpen,
   ArrowRightCircle,
-  Trash2, 
+  Trash2,
 } from "lucide-react";
 
 type Book = {
@@ -62,7 +64,7 @@ const UserProfile: React.FC = () => {
 
   const fetchLoans = async (userId: string) => {
     try {
-      const response = await axios.get(`http://localhost:4000/loans/user/${userId}`);
+      const response = await axios.get(`${API}/loans/user/${userId}`);
       setLoans(response.data);
     } catch (error) {
       console.error("Error al obtener los préstamos:", error);
@@ -71,7 +73,7 @@ const UserProfile: React.FC = () => {
 
   const fetchReservations = async (userId: string) => {
     try {
-      const response = await axios.get(`http://localhost:4000/reservations/user/${userId}`);
+      const response = await axios.get(`${API}/reservations/user/${userId}`);
       setReservations(response.data);
     } catch (error) {
       console.error("Error al obtener reservas:", error);
@@ -81,7 +83,7 @@ const UserProfile: React.FC = () => {
   const solicitarPrestamoDesdeReserva = async (bookId: string) => {
     try {
       const userId = user?.id || user?._id;
-      const response = await axios.post("http://localhost:4000/loans/request-loan", {
+      const response = await axios.post(`${API}/loans/request-loan`, {
         userId,
         bookId,
       });
@@ -104,7 +106,7 @@ const UserProfile: React.FC = () => {
     if (!confirmar) return;
 
     try {
-      await axios.delete(`http://localhost:4000/reservations/${reservationId}`);
+      await axios.delete(`${API}/reservations/${reservationId}`);
       alert("Reserva eliminada con éxito");
       fetchReservations(user?.id || user?._id!);
     } catch (error) {
@@ -160,8 +162,7 @@ const UserProfile: React.FC = () => {
               onSubmit={async (updatedUser) => {
                 try {
                   const currentId = user.id || user._id;
-                  const response = await axios.put(
-                    `http://localhost:4000/users/${currentId}`,
+                  const response = await axios.put(`${API}/users/${currentId}`,
                     updatedUser
                   );
                   const updated = {

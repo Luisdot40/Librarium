@@ -37,7 +37,7 @@ const Recomendation = () => {
   const [loans, setLoans] = useState<Loan[]>([]);
 
   useEffect(() => {
-    fetch("http://localhost:4000/books")
+    fetch(`${import.meta.env.VITE_API_URL}/books`)
       .then((res) => res.json())
       .then((data) => Array.isArray(data) && setBooks(data));
 
@@ -47,12 +47,12 @@ const Recomendation = () => {
       const currentUserId = parsed.id || parsed._id;
 
       axios
-        .get(`http://localhost:4000/reservations/user/${currentUserId}`)
+        .get(`${import.meta.env.VITE_API_URL}/reservations/user/${currentUserId}`)
         .then((res) => setReservations(res.data))
         .catch(console.error);
 
       axios
-        .get(`http://localhost:4000/loans/user/${currentUserId}`)
+        .get(`${import.meta.env.VITE_API_URL}/loans/user/${currentUserId}`)
         .then((res) => setLoans(res.data))
         .catch(console.error);
     }

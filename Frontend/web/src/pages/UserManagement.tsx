@@ -14,29 +14,27 @@ const UserLogin: React.FC = () => {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-  
+
     try {
-      const response = await fetch('http://localhost:4000/users/login', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/users/login`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
       });
-  
+
       const data = await response.json();
-  
+
       if (response.ok) {
         const { user } = data;
-  
+
         loginUser(user);
-  
+
         if (user.admin_user) {
           navigate('/adminProfile');
         } else {
           navigate('/userProfile');
         }
-  
+
         setEmail('');
         setPassword('');
       } else {

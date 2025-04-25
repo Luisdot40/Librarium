@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import Input from '../components/Inputs';
 import Button from '../components/Buttons';
 
+const API = import.meta.env.VITE_API_URL;
+
 const UserRegistration: React.FC = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -22,12 +24,10 @@ const UserRegistration: React.FC = () => {
 
     if (Object.keys(newErrors).length === 0) {
       try {
-        const response = await fetch('http://localhost:4000/users/register',   {
+        const response = await fetch(`${API}/users/register`, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ name, email, password, admin_user: role === 'admin', }),
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, password, admin_user: role === 'admin' })
         });
 
         const data = await response.json();
