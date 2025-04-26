@@ -340,7 +340,7 @@ const AdminProfile: React.FC = () => {
                   <button
                       onClick={async () => {
                         try {
-                          await axios.post(`http://localhost:4000/loans/approve/${loan._id}`);
+                          await axios.post(`${API}/loans/approve/${loan._id}`);
                           //await axios.post(`http://localhost:4000/loans/approve/${loan._id}`);
                           fetchPendingLoans();
                           alert("Préstamo aprobado y usuarios notificados.");
